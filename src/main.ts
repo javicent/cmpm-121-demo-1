@@ -26,8 +26,6 @@ function getUnitLabel(): string {
 }
 
 // Step 3
-// button.addEventListener("click", updateCounter);
-
 setInterval(() => {
   counter++;
   counterDisplay.innerHTML = `${counter} ${getUnitLabel()}`;
@@ -100,11 +98,11 @@ function updateCounter(timestamp: number) {
     requestAnimationFrame(updateCounter);
 }
 
-const upgradeItems: Record<string, { cost: number; growthRate: number }> = {
-    A: { cost: 10, growthRate: 0.1 },
-    B: { cost: 100, growthRate: 2.0 },
-    C: { cost: 1000, growthRate: 50.0 },
-  };
+const upgradeItems: Record<string, { cost: number; growthRate: number; costMultiplier: number}> = {
+    A: { cost: 10, growthRate: 0.1, costMultiplier: 1.15 },
+    B: { cost: 100, growthRate: 2.0, costMultiplier: 1.15 },
+    C: { cost: 1000, growthRate: 50.0, costMultiplier: 1.15 },
+};
 
   function calculateTotalGrowthRate(): number {
     let totalRate = 0;
@@ -116,18 +114,21 @@ const upgradeItems: Record<string, { cost: number; growthRate: number }> = {
 
 function purchaseUpgrade(itemName: string) {
     if (counter >= upgradeItems[itemName].cost) {
-      counter -= upgradeItems[itemName].cost;
-      totalGrowthRate += upgradeItems[itemName].growthRate;
-      itemCounts[itemName]++;
+        counter -= upgradeItems[itemName].cost;
+        totalGrowthRate += upgradeItems[itemName].growthRate;
+        itemCounts[itemName]++;
+        upgradeItems[itemName].cost *= upgradeItems[itemName].costMultiplier;
     }
 }
 
-// Buttons to purchase upgrades
+// Step 7
 for (const item in upgradeItems) {
     const button: HTMLButtonElement = document.createElement("button");
-    button.innerHTML = `Purchase ${item} (${upgradeItems[item].cost} units, ${upgradeItems[item].growthRate} ${getUnitLabel()}/sec)`;
+    const cost = upgradeItems[item].cost.toFixed(2);
+    button.innerHTML = `Purchase ${item} (${cost} units, ${upgradeItems[item].growthRate.toFixed(2)} ${getUnitLabel()}/sec)`;
     app.append(button);
     button.addEventListener("click", () => {
       purchaseUpgrade(item);
+      button.innerHTML = `Purchase ${item} (${upgradeItems[item].cost.toFixed(2)} units, ${upgradeItems[item].growthRate.toFixed(2)} ${getUnitLabel()}/sec)`;
     });
-  }
+}
