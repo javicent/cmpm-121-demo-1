@@ -42,7 +42,7 @@ button.addEventListener("click", () => {
 requestAnimationFrame(updateCounter);
 
 // Step 5
-let growthRate: number = 0;
+//let growthRate: number = 0;
 
 /* Not needed anymore
 const upgradeButton: HTMLButtonElement = document.createElement("button");
