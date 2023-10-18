@@ -99,9 +99,9 @@ function updateCounter(timestamp: number) {
 }
 
 const upgradeItems: Record<string, { cost: number; growthRate: number; costMultiplier: number}> = {
-    A: { cost: 10, growthRate: 0.1, costMultiplier: 1.15 },
-    B: { cost: 100, growthRate: 2.0, costMultiplier: 1.15 },
-    C: { cost: 1000, growthRate: 50.0, costMultiplier: 1.15 },
+    "Private Gorilla": { cost: 10, growthRate: 0.1, costMultiplier: 1.15 },
+    "Lieutenant Macaque": { cost: 100, growthRate: 2.0, costMultiplier: 1.15 },
+    "Captain Dryomomys": { cost: 1000, growthRate: 50.0, costMultiplier: 1.15 },
 };
 
   function calculateTotalGrowthRate(): number {
@@ -125,7 +125,7 @@ function purchaseUpgrade(itemName: string) {
 for (const item in upgradeItems) {
     const button: HTMLButtonElement = document.createElement("button");
     const cost = upgradeItems[item].cost.toFixed(2);
-    button.innerHTML = `Purchase ${item} (${cost} units, ${upgradeItems[item].growthRate.toFixed(2)} ${getUnitLabel()}/sec)`;
+    button.innerHTML = `Level Up ${item} (${cost} Monkeys, ${upgradeItems[item].growthRate.toFixed(2)} ${getUnitLabel()}/sec)`;
     app.append(button);
     button.addEventListener("click", () => {
       purchaseUpgrade(item);
