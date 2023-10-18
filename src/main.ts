@@ -22,7 +22,7 @@ counterDisplay.innerHTML = `${counter} ${getUnitLabel()}`;
 app.append(counterDisplay);
 
 function getUnitLabel(): string {
-  return "cookies"; // You can choose a fun unit label relevant to your emoji
+  return "Recruited Monkeys";
 }
 
 function updateCounter() {
@@ -30,4 +30,10 @@ function updateCounter() {
   counterDisplay.innerHTML = `${counter} ${getUnitLabel()}`;
 }
 
+// Step 3
 button.addEventListener("click", updateCounter);
+
+setInterval(() => {
+  counter++;
+  counterDisplay.innerHTML = `${counter} ${getUnitLabel()}`;
+}, 1000);
