@@ -46,6 +46,7 @@ requestAnimationFrame(updateCounter);
 // Step 5
 let growthRate: number = 0;
 
+/* Not needed anymore
 const upgradeButton: HTMLButtonElement = document.createElement("button");
 upgradeButton.innerHTML = "Deploy 10 Monkeys for upgrade";
 app.append(upgradeButton);
@@ -59,20 +60,74 @@ upgradeButton.addEventListener("click", () => {
     upgradeButton.disabled = true;
   }
 });
+*/
+
+// Step 6
+let totalGrowthRate: number = 0;
+
+let itemCounts: Record<string, number> = {
+    A: 0,
+    B: 0,
+    C: 0,
+};
+
+const growthRateDisplay: HTMLDivElement = document.createElement("div");
+app.append(growthRateDisplay);
+
+const itemCountsDisplay: HTMLDivElement = document.createElement("div");
+app.append(itemCountsDisplay);
 
 function updateCounter(timestamp: number) {
     const timeElapsed = timestamp - lastTimestamp;
-    const fractionalIncrease = (timeElapsed / 1000) * (1 / 60) * (1 + growthRate);
+  
+    // Calculate the total growth rate based on items purchased
+    const totalGrowthRate = calculateTotalGrowthRate();
+  
+    // Calculate the fractional increase based on the total growth rate
+    const fractionalIncrease = (timeElapsed / 1000) * totalGrowthRate;
     counter += fractionalIncrease;
+  
+    // Update the counter display
     counterDisplay.innerHTML = `${counter.toFixed(2)} ${getUnitLabel()}`;
+  
+    // Update the growth rate display
+    growthRateDisplay.innerHTML = `${totalGrowthRate.toFixed(1)} ${getUnitLabel()}/sec`;
+  
+    // Update the item counts display
+    itemCountsDisplay.innerHTML = `Items Purchased: A(${itemCounts.A}), B(${itemCounts.B}), C(${itemCounts.C})`;
+  
     lastTimestamp = timestamp;
-  
-    // Enable the upgrade button when the player has at least 10 units
-    if (counter >= 10) {
-      upgradeButton.disabled = false;
-    }
-  
     requestAnimationFrame(updateCounter);
+}
+
+const upgradeItems: Record<string, { cost: number; growthRate: number }> = {
+    A: { cost: 10, growthRate: 0.1 },
+    B: { cost: 100, growthRate: 2.0 },
+    C: { cost: 1000, growthRate: 50.0 },
+  };
+
+  function calculateTotalGrowthRate(): number {
+    let totalRate = 0;
+    for (const item in itemCounts) {
+      totalRate += itemCounts[item] * upgradeItems[item].growthRate;
+    }
+    return totalRate;
+}
+
+function purchaseUpgrade(itemName: string) {
+    if (counter >= upgradeItems[itemName].cost) {
+      counter -= upgradeItems[itemName].cost;
+      totalGrowthRate += upgradeItems[itemName].growthRate;
+      itemCounts[itemName]++;
+    }
+}
+
+// Buttons to purchase upgrades
+for (const item in upgradeItems) {
+    const button: HTMLButtonElement = document.createElement("button");
+    button.innerHTML = `Purchase ${item} (${upgradeItems[item].cost} units, ${upgradeItems[item].growthRate} ${getUnitLabel()}/sec)`;
+    app.append(button);
+    button.addEventListener("click", () => {
+      purchaseUpgrade(item);
+    });
   }
-  
-  requestAnimationFrame(updateCounter);
