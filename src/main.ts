@@ -36,28 +36,43 @@ setInterval(() => {
 // Step 4
 let lastTimestamp: number = 0;
 
-function updateCounter(timestamp: number) {
-  // Calculate the time elapsed since the last frame
-  const timeElapsed = timestamp - lastTimestamp;
-
-  // Calculate the fractional amount to increase the counter
-  const fractionalIncrease = (timeElapsed / 1000) * (1 / 60);
-
-  // Update the counter
-  counter += fractionalIncrease;
-
-  // Update the display
-  counterDisplay.innerHTML = `${counter.toFixed(2)} ${getUnitLabel()}`;
-
-  lastTimestamp = timestamp;
-
-  // Request the next animation frame
-  requestAnimationFrame(updateCounter);
-}
-
 button.addEventListener("click", () => {
     counter++;
     counterDisplay.innerHTML = `${counter.toFixed(2)} ${getUnitLabel()}`;
 });
 
 requestAnimationFrame(updateCounter);
+
+// Step 5
+let growthRate: number = 0;
+
+const upgradeButton: HTMLButtonElement = document.createElement("button");
+upgradeButton.innerHTML = "Deploy 10 Monkeys for upgrade";
+app.append(upgradeButton);
+
+upgradeButton.disabled = true;
+
+upgradeButton.addEventListener("click", () => {
+  if (counter >= 10) {
+    counter -= 10;
+    growthRate++;
+    upgradeButton.disabled = true;
+  }
+});
+
+function updateCounter(timestamp: number) {
+    const timeElapsed = timestamp - lastTimestamp;
+    const fractionalIncrease = (timeElapsed / 1000) * (1 / 60) * (1 + growthRate);
+    counter += fractionalIncrease;
+    counterDisplay.innerHTML = `${counter.toFixed(2)} ${getUnitLabel()}`;
+    lastTimestamp = timestamp;
+  
+    // Enable the upgrade button when the player has at least 10 units
+    if (counter >= 10) {
+      upgradeButton.disabled = false;
+    }
+  
+    requestAnimationFrame(updateCounter);
+  }
+  
+  requestAnimationFrame(updateCounter);
