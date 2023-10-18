@@ -25,15 +25,39 @@ function getUnitLabel(): string {
   return "Recruited Monkeys";
 }
 
-function updateCounter() {
-  counter++;
-  counterDisplay.innerHTML = `${counter} ${getUnitLabel()}`;
-}
-
 // Step 3
-button.addEventListener("click", updateCounter);
+// button.addEventListener("click", updateCounter);
 
 setInterval(() => {
   counter++;
   counterDisplay.innerHTML = `${counter} ${getUnitLabel()}`;
 }, 1000);
+
+// Step 4
+let lastTimestamp: number = 0;
+
+function updateCounter(timestamp: number) {
+  // Calculate the time elapsed since the last frame
+  const timeElapsed = timestamp - lastTimestamp;
+
+  // Calculate the fractional amount to increase the counter
+  const fractionalIncrease = (timeElapsed / 1000) * (1 / 60);
+
+  // Update the counter
+  counter += fractionalIncrease;
+
+  // Update the display
+  counterDisplay.innerHTML = `${counter.toFixed(2)} ${getUnitLabel()}`;
+
+  lastTimestamp = timestamp;
+
+  // Request the next animation frame
+  requestAnimationFrame(updateCounter);
+}
+
+button.addEventListener("click", () => {
+    counter++;
+    counterDisplay.innerHTML = `${counter.toFixed(2)} ${getUnitLabel()}`;
+});
+
+requestAnimationFrame(updateCounter);
