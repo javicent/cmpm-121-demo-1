@@ -65,18 +65,51 @@ function updateCounter(timestamp: number) {
   requestAnimationFrame(updateCounter);
 }
 
-// Define the available items
+// Define the available items with descriptions
 interface Item {
   name: string;
   cost: number;
   rate: number;
-  costMultiplier: number; // Add costMultiplier property
+  costMultiplier: number;
+  description: string; // Add description field
 }
 
 const availableItems: Item[] = [
-  { name: "Private Gorilla", cost: 10, rate: 0.1, costMultiplier: 1.15 },
-  { name: "Lieutenant Macaque", cost: 100, rate: 2.0, costMultiplier: 1.15 },
-  { name: "Captain Dryomomys", cost: 1000, rate: 50.0, costMultiplier: 1.15 },
+  {
+    name: "Private Gorilla",
+    cost: 10,
+    rate: 0.1,
+    costMultiplier: 1.15,
+    description: "Hire a Private Gorilla to help with monkey business.",
+  },
+  {
+    name: "Lieutenant Macaque",
+    cost: 100,
+    rate: 2.0,
+    costMultiplier: 1.15,
+    description: "Upgrade to a Lieutenant Macaque for increased productivity.",
+  },
+  {
+    name: "Captain Dryomomys",
+    cost: 1000,
+    rate: 50.0,
+    costMultiplier: 1.15,
+    description: "Recruit Captain Dryomomys to lead your monkey army.",
+  },
+  {
+    name: "Sergeant Chimpanzee",
+    cost: 5000,
+    rate: 200.0,
+    costMultiplier: 1.15,
+    description: "Sergeant Chimpanzee takes your troop to the next level!",
+  },
+  {
+    name: "General Baboon",
+    cost: 20000,
+    rate: 1000.0,
+    costMultiplier: 1.15,
+    description: "The peak of monkey civilization. No one is left uninspired",
+  },
 ];
 
 function calculateTotalGrowthRate(): number {
@@ -114,14 +147,14 @@ function generateItemCountsDisplay(): string {
   return displayText.slice(0, -2);
 }
 
-// Buttons to purchase upgrades
+// Buttons to purchase upgrades with descriptions
 for (const item of availableItems) {
   const button: HTMLButtonElement = document.createElement("button");
   const cost = item.cost.toFixed(2);
-  button.innerHTML = `Level Up ${item.name} (${cost} units, ${item.rate.toFixed(2)} ${getUnitLabel()}/sec)`;
+  button.innerHTML = `Level Up ${item.name} (${cost} units, ${item.rate.toFixed(2)} ${getUnitLabel()}/sec) - ${item.description}`;
   app.append(button);
   button.addEventListener("click", () => {
     purchaseUpgrade(item.name);
-    button.innerHTML = `Level Up ${item.name} (${item.cost.toFixed(2)} units, ${item.rate.toFixed(2)} ${getUnitLabel()}/sec)`;
+    button.innerHTML = `Level Up ${item.name} (${item.cost.toFixed(2)} units, ${item.rate.toFixed(2)} ${getUnitLabel()}/sec) - ${item.description}`;
   });
 }
